@@ -14,13 +14,26 @@ class VouchersCreated
     use InteractsWithSockets;
     use SerializesModels;
 
+    public readonly array $successfullyProcessed;
+    public readonly array $failedProcessing;
+    public readonly array $vouchers;
+    public readonly User $user;
+
     /**
      * @param Voucher[] $vouchers
      * @param User $user
+     * @param Voucher[] $successfullyProcessed
+     * @param array $failedProcessing
      */
     public function __construct(
-        public readonly array $vouchers,
-        public readonly User $user
+        array $vouchers,
+        User $user,
+        array $successfullyProcessed = [],
+        array $failedProcessing = []
     ) {
+        $this->vouchers = $vouchers;
+        $this->user = $user;
+        $this->successfullyProcessed = $successfullyProcessed;
+        $this->failedProcessing = $failedProcessing;
     }
 }

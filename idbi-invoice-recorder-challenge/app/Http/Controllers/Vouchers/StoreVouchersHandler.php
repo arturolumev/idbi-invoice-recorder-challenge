@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+use App\Jobs\ProcessVoucherJob;
+
 class StoreVouchersHandler
 {
     public function __construct(private readonly VoucherService $voucherService)
@@ -31,6 +33,11 @@ class StoreVouchersHandler
 
             $user = auth()->user();
             $vouchers = $this->voucherService->storeVouchersFromXmlContents($xmlContents, $user);
+
+            // Despachar un job para cada voucher
+            foreach ($vouchers as $voucher) {
+                ProcessVoucherJob::dispatch($voucher);
+            }
 
             return VoucherResource::collection($vouchers);
         } catch (Exception $exception) {

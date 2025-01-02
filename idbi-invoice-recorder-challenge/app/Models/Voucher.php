@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+use Illuminate\Support\Facades\Validator;
+
 /**
  * @property string $id
  * @property string $issuer_name
@@ -68,5 +70,40 @@ class Voucher extends Model
     public function lines(): HasMany
     {
         return $this->hasMany(VoucherLine::class);
+    }
+
+    /**
+     * Valida y guarda el comprobante.
+     *
+     * @throws \Exception Si la validación falla.
+     */
+    public function validateAndSave(): void
+    {
+        // Definir reglas de validación
+        $rules = [
+            'issuer_name' => 'required|string|max:255',
+            'issuer_document_type' => 'required|string|max:10',
+            'issuer_document_number' => 'required|string|max:20',
+            'receiver_name' => 'required|string|max:255',
+            'receiver_document_type' => 'required|string|max:10',
+            'receiver_document_number' => 'required|string|max:20',
+            'total_amount' => 'required|numeric|min:0',
+            'serie' => 'required|string|max:10',
+            'numero' => 'required|string|max:20',
+            'tipo' => 'required|string|max:10',
+            'moneda' => 'required|string|max:10',
+            'xml_content' => 'required|string',
+        ];
+
+        // Validar los datos actuales del modelo
+        $validator = Validator::make($this->toArray(), $rules);
+
+        if ($validator->fails()) {
+            // Lanzar una excepción con los errores de validación
+            throw new \Exception("Errores de validación: " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Guardar el modelo
+        $this->save();
     }
 }
