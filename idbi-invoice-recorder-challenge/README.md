@@ -81,3 +81,33 @@ La API estará disponible en: http://localhost:8080/api/v1
 
 Para visualizar los correos enviados por la aplicación, puedes acceder a la interfaz de MailHog desde tu navegador
 en: http://localhost:8025
+
+## Nuevas consideraciones
+
+#### Almacenamiento de Información Adicional en Comprobantes
+
+- Se aplicaron los nuevos campos serie, numero, tipo y moneda para la tabla de vouchers
+
+#### Procesamiento Asíncrono de Comprobantes
+
+- Se cambio la QUEUE_CONNECTION a database para que funcione de manera asincrona
+
+- También se creo el job para el procesamiento del voucher y el envio de la notificacion.
+
+#### Consulta de Montos Totales Acumulados por Moneda
+
+- Se creo un endpoint llamado 'montos' para el procesamiento de los montos totales que realizo el usuario en soles y dolares de los vouchers que haya registrado.
+- GET - Para la visualizacion de montos en soles y dolares: http://localhost:8080/api/v1/montos
+
+#### Eliminación de Comprobantes por Identificador
+
+- Se creo el nuevo endpoint DELETE para la eliminación de un voucher.
+- GET Para la visualizacion de montos en soles y dolares: http://localhost:8080/api/v1/montos
+
+
+#### Filtros Avanzados en la Consulta de Comprobantes
+
+- Se aplicaron filtros avanzados al endpoint existente GET de vouchers, siendo el principal y requerido la fecha de inicio y fin-
+
+- DELETE - Para eliminar un voucher (el usuario que lo elimine tiene que estar autenticado como el usuario creador de ese voucher) http://localhost:8080/api/v1/vouchers/9dde9eae-55c7-4738-a16a-2311fa6a536a
+
