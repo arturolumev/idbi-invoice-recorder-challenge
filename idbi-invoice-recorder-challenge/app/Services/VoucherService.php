@@ -11,9 +11,44 @@ use SimpleXMLElement;
 
 class VoucherService
 {
-    public function getVouchers(int $page, int $paginate): LengthAwarePaginator
+    /**
+     * Obtener los comprobantes filtrados y paginados.
+     *
+     * @param array $filters
+     * @param int $page
+     * @param int $paginate
+     * @return LengthAwarePaginator
+     */
+    public function getVouchers(array $filters, int $page, int $paginate): LengthAwarePaginator
     {
-        return Voucher::with(['lines', 'user'])->paginate(perPage: $paginate, page: $page);
+        // Inicializar la consulta base
+        $query = Voucher::with(['lines', 'user'])
+                        ->where('user_id', auth()->id())  // Solo comprobantes del usuario autenticado
+                        ->whereBetween('created_at', [$filters['start_date'], $filters['end_date']]); // Filtro obligatorio de fechas
+
+        // Filtros opcionales
+        if (!empty($filters['serie'])) {
+            $query->where('serie', 'like', '%' . $filters['serie'] . '%');
+        }
+        if (!empty($filters['numero'])) {
+            $query->where('numero', 'like', '%' . $filters['numero'] . '%');
+        }
+        if (!empty($filters['tipo'])) {
+            $query->where('tipo', 'like', '%' . $filters['tipo'] . '%');
+        }
+        if (!empty($filters['moneda'])) {
+            $query->where('moneda', 'like', '%' . $filters['moneda'] . '%');
+        }
+
+        // Obtener el total de registros
+        $total = $query->count();
+
+        // Asegurarse de que la página no sea mayor que el total de páginas disponibles
+        $maxPages = (int) ceil($total / $paginate);
+        $page = min($page, $maxPages); // Limitar la página a la última página disponible
+
+        // Aplicar la paginación y retornar los resultados
+        return $query->paginate($paginate, ['*'], 'page', $page);
     }
 
     /**
