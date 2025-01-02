@@ -102,8 +102,6 @@ en: http://localhost:8025
 #### Eliminación de Comprobantes por Identificador
 
 - Se creo el nuevo endpoint DELETE para la eliminación de un voucher.
-- GET Para la visualizacion de montos en soles y dolares: http://localhost:8080/api/v1/montos
-
 
 #### Filtros Avanzados en la Consulta de Comprobantes
 
