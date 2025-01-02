@@ -14,6 +14,10 @@
         <li>Nombre del Receptor: {{ $voucher->receiver_name }}</li>
         <li>Tipo de Documento del Receptor: {{ $voucher->receiver_document_type }}</li>
         <li>Número de Documento del Receptor: {{ $voucher->receiver_document_number }}</li>
+        <li>Serie: {{ $voucher->serie }}</li>
+        <li>Número: {{ $voucher->numero }}</li>
+        <li>Tipo: {{ $voucher->tipo }}</li>
+        <li>Moneda: {{ $voucher->moneda }}</li>
         <li>Monto Total: {{ $voucher->total_amount }}</li>
     </ul>
     @endforeach

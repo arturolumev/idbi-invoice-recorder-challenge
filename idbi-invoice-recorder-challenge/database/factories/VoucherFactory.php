@@ -27,6 +27,10 @@ class VoucherFactory extends Factory
             'receiver_document_type' => $this->faker->randomElement([1, 4, 6, 7]),
             'receiver_document_number' => $this->faker->randomNumber(8),
             'total_amount' => $this->faker->randomFloat(2, 10, 1000),
+            'serie' => $this->faker->name(),
+            'numero' => $this->faker->name(),
+            'tipo' => $this->faker->name(),
+            'moneda' => $this->faker->name(),
             'xml_content' => $this->faker->text(),
         ];
     }
