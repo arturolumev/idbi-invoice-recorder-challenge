@@ -88,4 +88,20 @@ class VoucherService
 
         return $voucher;
     }
+
+    // OBTENER MONTOS TOTALES ACUMULADOS POR MONEDA
+    public function getMontosPorMoneda(string $userId): array
+    {
+        // Consultar los montos totales por moneda para el usuario
+        $totales = Voucher::where('user_id', $userId)
+            ->selectRaw('moneda, sum(total_amount) as total')
+            ->groupBy('moneda')
+            ->get();
+
+        // Formatear los resultados
+        return [
+            'PEN' => $totales->where('moneda', 'PEN')->sum('total'),
+            'USD' => $totales->where('moneda', 'USD')->sum('total'),
+        ];
+    }
 }
